@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --danger-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        ul {
+            list-style: none;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        li.completed span {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .task-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            word-break: break-all;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            background: transparent;
+            color: var(--danger-color);
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            border-radius: 4px;
+        }
+
+        .delete-btn:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .clear-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            padding: 0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .clear-btn:hover {
+            color: var(--danger-color);
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Minha Lista</h1>
+        
+        <form id="task-form" class="input-group">
+            <input type="text" id="task-input" placeholder="Adicionar uma nova tarefa..." required autocomplete="off">
+            <button type="submit">Adicionar</button>
+        </form>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Todas</button>
+            <button class="filter-btn" data-filter="pending">Pendentes</button>
+            <button class="filter-btn" data-filter="completed">Concluídas</button>
+        </div>
+
+        <ul id="task-list"></ul>
+
+        <div class="footer">
+            <span id="task-count">0 tarefas restantes</span>
+            <button class="clear-btn" id="clear-completed">Limpar concluídas</button>
+        </div>
+    </div>
+
+    <script>
+        const taskForm = document.getElementById('task-form');
+        const taskInput = document.getElementById('task-input');
+        const taskList = document.getElementById('task-list');
+        const taskCount = document.getElementById('task-count');
+        const clearCompletedBtn = document.getElementById('clear-completed');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let currentFilter = 'all';
+
+        function saveAndRender() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function renderTasks() {
+            taskList.innerHTML = '';
+            
+            let filteredTasks = tasks.filter(task => {
+                if (currentFilter === 'pending') return !task.completed;
+                if (currentFilter === 'completed') return task.completed;
+                return true;
+            });
+
+            filteredTasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                if (task.completed) li.classList.add('completed');
+
+                li.innerHTML = `
+                    <div class="task-content">
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${task.id})">
+                        <span>${escapeHtml(task.text)}</span>
+                    </div>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">Excluir</button>
+                `;
+
+                taskList.appendChild(li);
+            });
+
+            const pendingCount = tasks.filter(t => !t.completed).length;
+            taskCount.textContent = `${pendingCount} ${pendingCount === 1 ? 'tarefa restante' : 'tarefas restantes'}`;
+        }
+
+        function addTask(e) {
+            e.preventDefault();
+            const text = taskInput.value.trim();
+            if (!text) return;
+
+            const newTask = {
+                id: Date.now(),
+                text: text,
+                completed: false
+            };
+
+            tasks.push(newTask);
+            taskInput.value = '';
+            saveAndRender();
+        }
+
+        function toggleTask(id) {
+            tasks = tasks.map(task => {
+                if (task.id === id) {
+                    return { ...task, completed: !task.completed };
+                }
+                return task;
+            });
+            saveAndRender();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(task => task.id !== id);
+            saveAndRender();
+        }
+
+        clearCompletedBtn.addEventListener('click', () => {
+            tasks = tasks.filter(task => !task.completed);
+            saveAndRender();
+        });
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderTasks();
+            });
+        });
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        taskForm.addEventListener('submit', addTask);
+
+        // Inicializar
+        renderTasks();
+    </script>
+</body>
+</html>
