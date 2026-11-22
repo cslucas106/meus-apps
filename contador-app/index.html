@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <h1>Contador</h1>
+        <div id="counter-display" class="display">0</div>
+        
+        <div class="controls">
+            <button id="btn-decrement" class="btn">-</button>
+            <button id="btn-reset" class="btn btn-secondary">Zerar</button>
+            <button id="btn-increment" class="btn">+</button>
+        </div>
+
+        <section class="history-section">
+            <h2>Histórico</h2>
+            <ul id="history-list"></ul>
+        </section>
+    </main>
+
+    <script src="state.js"></script>
+    <script src="ui.js"></script>
+    <script src="controls.js"></script>
+</body>
+</html>
