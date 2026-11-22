@@ -40,20 +40,20 @@ for(let i=0;i<80;i++) stars.push({x:Math.random()*W,y:Math.random()*H,s:Math.ran
 let input={x:0,y:0,shoot:false,aimX:0,aimY:-1}, touchJ=null, touchS=null;
 function clamp(v,m,M){return v<m?m:v>M?M:v}
 function dist(ax,ay,bx,by){const dx=ax-bx,dy=ay-by;return Math.hypot(dx,dy)}
-function angle(ax,ay,bx,by){return Math.atan2(by-ay,bx-ax)}
 
-stickR.addEventListener('touchstart',e=>{e.preventDefault();touchJ=e.changedTouches[0].identifier;updateStick(e.changedTouches[0])},{passive:false});
-stickR.addEventListener('touchmove',e=>{for(let t of e.changedTouches)if(t.identifier===touchJ){updateStick(t);break}},{passive:false});
+stickR.addEventListener('touchstart',e=>{e.preventDefault();const t=e.changedTouches[0];touchJ=t.identifier;updateStick(t)},{passive:false});
+stickR.addEventListener('touchmove',e=>{e.preventDefault();for(let t of e.changedTouches)if(t.identifier===touchJ){updateStick(t);break}},{passive:false});
 stickR.addEventListener('touchend',e=>{for(let t of e.changedTouches)if(t.identifier===touchJ){touchJ=null;resetStick();break}},{passive:false});
-btnL.addEventListener('touchstart',e=>{e.preventDefault();touchS=e.changedTouches[0].identifier;input.shoot=true},{passive:false});
+btnL.addEventListener('touchstart',e=>{e.preventDefault();const t=e.changedTouches[0];touchS=t.identifier;input.shoot=true;ctxA.resume()},{passive:false});
 btnL.addEventListener('touchend',e=>{for(let t of e.changedTouches)if(t.identifier===touchS){touchS=null;input.shoot=false;break}},{passive:false});
+btnL.addEventListener('touchcancel',e=>{for(let t of e.changedTouches)if(t.identifier===touchS){touchS=null;input.shoot=false;break}},{passive:false});
 
-window.addEventListener('keydown',e=>{if(e.key==='ArrowUp'||e.key==='w'){input.y=-1;input.aimX=0;input.aimY=-1}if(e.key==='ArrowDown'||e.key==='s'){input.y=1;input.aimX=0;input.aimY=1}if(e.key==='ArrowLeft'||e.key==='a'){input.x=-1;input.aimX=-1;input.aimY=0}if(e.key==='ArrowRight'||e.key==='d'){input.x=1;input.aimX=1;input.aimY=0}if(e.code==='Space')input.shoot=true});
+window.addEventListener('keydown',e=>{if(e.key==='ArrowUp'||e.key==='w'){input.y=-1;input.aimX=0;input.aimY=-1}if(e.key==='ArrowDown'||e.key==='s'){input.y=1;input.aimX=0;input.aimY=1}if(e.key==='ArrowLeft'||e.key==='a'){input.x=-1;input.aimX=-1;input.aimY=0}if(e.key==='ArrowRight'||e.key==='d'){input.x=1;input.aimX=1;input.aimY=0}if(e.code==='Space'){input.shoot=true;ctxA.resume()}});
 window.addEventListener('keyup',e=>{if(e.key==='ArrowUp'||e.key==='w')input.y=0;if(e.key==='ArrowDown'||e.key==='s')input.y=0;if(e.key==='ArrowLeft'||e.key==='a')input.x=0;if(e.key==='ArrowRight'||e.key==='d')input.x=0;if(e.code==='Space')input.shoot=false});
 window.addEventListener('resize',()=>{W=innerWidth;H=innerHeight;c.width=W;c.height=H;stickR.style.right='20px';btnL.style.left='20px';});
 
-function updateStick(t){const r=stickR.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;const dx=t.clientX-cx,dy=t.clientY-cy;const d=Math.hypot(dx,dy),maxR=45;const a=Math.atan2(dy,dx);const cd=Math.min(d,maxR);input.x=Math.cos(a)*cd/maxR;input.y=Math.sin(a)*cd/maxR;if(cd>8){input.aimX=Math.cos(a);input.aimY=Math.sin(a)}knobR.style.transform=`translate(calc(-50% + ${Math.cos(a)*cd}px), calc(-50% + ${Math.sin(a)*cd}px))`;}
-function resetStick(){input.x=input.y=0;knobR.style.transform='translate(-50%,-50%)';}
+function updateStick(t){const r=stickR.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;const dx=t.clientX-cx,dy=t.clientY-cy;const d=Math.hypot(dx,dy),maxR=45;const a=Math.atan2(dy,dx);const cd=Math.min(d,maxR);input.x=Math.cos(a)*cd/maxR;input.y=Math.sin(a)*cd/maxR;if(cd>15){input.aimX=Math.cos(a);input.aimY=Math.sin(a)}knobR.style.transform=`translate(${Math.cos(a)*cd}px, ${Math.sin(a)*cd}px)`;}
+function resetStick(){input.x=input.y=0;knobR.style.transform='translate(0,0)';}
 
 function spawnEnemy(){const side=Math.floor(Math.random()*4);let x,y;const m=50;
 if(side===0){x=Math.random()*W;y=-m}else if(side===1){x=W+m;y=Math.random()*H}else if(side===2){x=Math.random()*W;y=H+m}else{x=-m;y=Math.random()*H}
@@ -65,7 +65,7 @@ enemies.push({x,y,hp,maxHp:hp,spd,sz,col,val,type:t,ang:0});
 function spawnPickup(x,y){if(Math.random()<0.15) pickups.push({x,y,type:Math.random()<0.5?'hp':'pow',t:0});}
 
 function shoot(){if(P.cd>0)return;P.cd=P.power>=3?60:P.power===2?90:130;sfx.shoot();
-const a=Math.atan2(input.aimY,input.aimX);
+const a=Math.atan2(input.aimY,input.aimX)||0;
 if(P.power===1){bullets.push({x:P.x,y:P.y,a,spd:12,dmg:1,sz:5,col:'#fff',trail:[]})}
 else if(P.power===2){[-0.15,0,0.15].forEach(o=>bullets.push({x:P.x,y:P.y,a:a+o,spd:11,dmg:1,sz:4,col:'#ffd93d',trail:[]}))}
 else{[-0.25,-0.1,0,0.1,0.25].forEach(o=>bullets.push({x:P.x,y:P.y,a:a+o,spd:10,dmg:1,sz:4,col:'#ff6b9d',trail:[]}));[-0.5,0.5].forEach(o=>bullets.push({x:P.x,y:P.y,a:a+o,spd:9,dmg:1,sz:3,col:'#fff',trail:[]}))}
@@ -131,10 +131,12 @@ ctx.fillStyle='#ffd93d';ctx.font='18px system-ui';ctx.fillText('Toque ou Espaço
 if(shake>0)ctx.restore();
 requestAnimationFrame(loop);
 }
-c.addEventListener('mousedown',e=>{if(gameOver)return;if(e.clientX>W/2){touchJ=-1;updateStick(e)}else{touchS=-1;input.shoot=true}});
+c.addEventListener('mousedown',e=>{if(gameOver){restart();return}if(e.clientX>W/2){touchJ=-1;updateStick(e)}else{touchS=-1;input.shoot=true;ctxA.resume()}});
 c.addEventListener('mousemove',e=>{if(touchJ===-1)updateStick(e)});
-c.addEventListener('mouseup',()=>{if(touchJ===-1){touchJ=null;resetStick()}if(touchS===-1){touchS=null;input.shoot=false}});
-c.addEventListener('click',()=>{if(gameOver){P.x=W/2;P.y=H/2;P.hp=5;P.power=1;P.inv=0;P.cd=0;bullets.length=0;enemies.length=0;parts.length=0;pickups.length=0;score=0;wave=1;waveT=0;gameOver=false;shake=0;ctxA.resume()}});
+c.addEventListener('mouseup',e=>{if(touchJ===-1){touchJ=null;resetStick()}if(touchS===-1){touchS=null;input.shoot=false}});
+c.addEventListener('click',()=>{if(gameOver)restart()});
+
+function restart(){P.x=W/2;P.y=H/2;P.hp=5;P.power=1;P.inv=0;P.cd=0;input.aimX=0;input.aimY=-1;bullets.length=0;enemies.length=0;parts.length=0;pickups.length=0;score=0;wave=1;waveT=0;gameOver=false;shake=0;ctxA.resume()}
 loop();
 </script>
 </body>
