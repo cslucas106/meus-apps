@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário Celeste</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="sky" class="sky">
+        <div id="clouds" class="clouds"></div>
+        <div id="stars" class="stars"></div>
+        
+        <main class="container">
+            <header class="header">
+                <button id="prev-btn" class="btn">&lt;</button>
+                <h1 id="month-year"></h1>
+                <button id="next-btn" class="btn">&gt;</button>
+            </header>
+
+            <div class="mode-info" id="mode-info"></div>
+
+            <div class="calendar-grid">
+                <div class="weekdays">
+                    <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+                </div>
+                <div id="days-container" class="days"></div>
+            </div>
+
+            <div class="event-panel">
+                <h2 id="selected-date-title">Selecione um dia</h2>
+                <div class="event-input-group">
+                    <input type="text" id="event-input" placeholder="Adicionar lembrete...">
+                    <button id="add-event-btn" class="btn primary">Salvar</button>
+                </div>
+                <ul id="event-list" class="event-list"></ul>
+            </div>
+        </main>
+    </div>
+
+    <script src="time-theme.js"></script>
+    <script src="storage.js"></script>
+    <script src="calendar.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
