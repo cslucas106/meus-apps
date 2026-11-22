@@ -9,14 +9,13 @@ window.addEventListener('resize', () => { W = innerWidth; H = innerHeight; c.wid
 
 c.addEventListener('mousedown', e => {
   if (gameOver) { restart(); return; }
-  if (e.clientX > W / 2) { updateMouseStick(e); }
+  if (e.clientX > W / 2) { window.touchJ = -1; updateMouseStick(e); }
   else { Input.shoot = true; resumeAudio(); }
 });
-c.addEventListener('mousemove', e => { if (touchJ === -1) updateMouseStick(e); });
-c.addEventListener('mouseup', () => { touchJ = null; resetStick(); Input.shoot = false; });
+c.addEventListener('mousemove', e => { if (window.touchJ === -1) updateMouseStick(e); });
+c.addEventListener('mouseup', () => { window.touchJ = null; resetStick(); Input.shoot = false; });
 c.addEventListener('click', () => { if (gameOver) restart(); });
 
-let touchJ = null;
 function updateMouseStick(e) {
   const r = stickR.getBoundingClientRect();
   const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
@@ -27,7 +26,6 @@ function updateMouseStick(e) {
   if (cd > 15) { Input.aimX = Math.cos(a); Input.aimY = Math.sin(a); }
   knobR.style.transform = `translate(${Math.cos(a) * cd}px, ${Math.sin(a) * cd}px)`;
 }
-function resetStick() { Input.x = Input.y = 0; knobR.style.transform = 'translate(0,0)'; }
 
 function loop() {
   if (shake > 0) { shake--; ctx.save(); ctx.translate((Math.random() - 0.5) * shake * 2, (Math.random() - 0.5) * shake * 2); }

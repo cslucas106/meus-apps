@@ -3,14 +3,15 @@ const knobR = document.getElementById('knobR');
 const btnL = document.getElementById('btnL');
 
 window.Input = { x: 0, y: 0, shoot: false, aimX: 0, aimY: -1 };
-let touchJ = null, touchS = null;
+window.touchJ = null;
+let touchS = null;
 
 window.clamp = (v, m, M) => v < m ? m : v > M ? M : v;
 window.dist = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
 
-stickR.addEventListener('touchstart', e => { e.preventDefault(); touchJ = e.changedTouches[0].identifier; updateStick(e.changedTouches[0]); }, { passive: false });
-stickR.addEventListener('touchmove', e => { e.preventDefault(); for (let t of e.changedTouches) if (t.identifier === touchJ) { updateStick(t); break } }, { passive: false });
-stickR.addEventListener('touchend', e => { for (let t of e.changedTouches) if (t.identifier === touchJ) { touchJ = null; resetStick(); break } }, { passive: false });
+stickR.addEventListener('touchstart', e => { e.preventDefault(); window.touchJ = e.changedTouches[0].identifier; updateStick(e.changedTouches[0]); }, { passive: false });
+stickR.addEventListener('touchmove', e => { e.preventDefault(); for (let t of e.changedTouches) if (t.identifier === window.touchJ) { updateStick(t); break } }, { passive: false });
+stickR.addEventListener('touchend', e => { for (let t of e.changedTouches) if (t.identifier === window.touchJ) { window.touchJ = null; resetStick(); break } }, { passive: false });
 
 btnL.addEventListener('touchstart', e => { e.preventDefault(); touchS = e.changedTouches[0].identifier; Input.shoot = true; resumeAudio(); }, { passive: false });
 btnL.addEventListener('touchend', e => { for (let t of e.changedTouches) if (t.identifier === touchS) { touchS = null; Input.shoot = false; break } }, { passive: false });
