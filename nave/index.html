@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>App de Nave</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+    <div id="hud">
+      <div id="score">Pontos: 0</div>
+      <div id="lives">Vidas: 3</div>
+    </div>
+    <div id="start-screen" class="screen">
+      <h1>NAVE ESPACIAL</h1>
+      <p>Desvie dos asteróides e destrua os inimigos!</p>
+      <button id="start-btn">INICIAR JOGO</button>
+    </div>
+    <div id="game-over-screen" class="screen hidden">
+      <h1>FIM DE JOGO</h1>
+      <p id="final-score">Pontuação: 0</p>
+      <button id="restart-btn">JOGAR NOVAMENTE</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script src="controls.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
