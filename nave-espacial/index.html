@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Nave Estelar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+    
+    <div id="hud">
+      <div class="hud-item" id="score">
+        <span>Pontos</span>
+        <span class="hud-value" id="score-value">0</span>
+      </div>
+      <div class="hud-item" id="high-score">
+        <span>Recorde</span>
+        <span class="hud-value" id="high-score-value">0</span>
+      </div>
+      <div class="hud-item" id="level">
+        <span>Nível</span>
+        <span class="hud-value" id="level-value">1</span>
+      </div>
+      <div class="hud-item" id="lives">
+        <span>Vidas</span>
+        <span class="hud-value" id="lives-value">♥♥♥</span>
+      </div>
+    </div>
+    
+    <div id="controls">
+      <div class="control-row">
+        <button id="btn-left" aria-label="Esquerda">◀</button>
+        <button id="btn-up" aria-label="Cima">▲</button>
+        <button id="btn-right" aria-label="Direita">▶</button>
+      </div>
+      <div class="control-row">
+        <button id="btn-down" aria-label="Baixo">▼</button>
+      </div>
+      <button class="fire-btn" id="btn-fire" aria-label="Atirar">●</button>
+    </div>
+    
+    <div id="overlay" class="hidden">
+      <h1>GAME OVER</h1>
+      <div id="final-score">Pontuação: <span id="final-score-value">0</span></div>
+      <button id="restart-btn">JOGAR NOVAMENTE</button>
+    </div>
+  </div>
+  
+  <script src="game.js"></script>
+  <script src="player.js"></script>
+  <script src="enemies.js"></script>
+  <script src="bullets.js"></script>
+  <script src="particles.js"></script>
+  <script src="powerups.js"></script>
+  <script src="controls.js"></script>
+  <script src="ui.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
