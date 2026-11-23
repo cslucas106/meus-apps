@@ -12,6 +12,7 @@ window.Game = {
   spawnTimer: 0,
   spawnInterval: 1500,
   shakeTime: 0,
+  animationFrameId: null,
   
   init(canvas) {
     this.canvas = canvas;
@@ -35,6 +36,7 @@ window.Game = {
   },
   
   start() {
+    this.stop();
     UI.hideOverlay();
     this.running = true;
     this.score = 0;
@@ -49,7 +51,16 @@ window.Game = {
     Particles.reset();
     PowerUps.reset();
     UI.update(this);
-    requestAnimationFrame(t => this.loop(t));
+    this.lastTime = performance.now();
+    this.animationFrameId = requestAnimationFrame(t => this.loop(t));
+  },
+  
+  stop() {
+    this.running = false;
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
   },
   
   loop(time) {
@@ -60,7 +71,7 @@ window.Game = {
     this.update(dt);
     this.draw();
     
-    requestAnimationFrame(t => this.loop(t));
+    this.animationFrameId = requestAnimationFrame(t => this.loop(t));
   },
   
   update(dt) {
@@ -158,7 +169,7 @@ window.Game = {
   },
   
   gameOver() {
-    this.running = false;
+    this.stop();
     UI.showGameOver(this);
   },
   

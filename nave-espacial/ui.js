@@ -17,8 +17,12 @@ window.UI = {
     this.restartBtn = document.getElementById('restart-btn');
     
     if (this.restartBtn) {
-      this.restartBtn.addEventListener('click', () => Game.start());
-      this.restartBtn.addEventListener('touchstart', e => { e.preventDefault(); Game.start(); }, { passive: false });
+      const handler = (e) => {
+        e.preventDefault();
+        Game.start();
+      };
+      this.restartBtn.addEventListener('click', handler);
+      this.restartBtn.addEventListener('touchstart', handler, { passive: false });
     }
   },
   
