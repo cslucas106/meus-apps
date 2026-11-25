@@ -93,7 +93,7 @@ class Interactable extends Entity {
     draw(renderer) {
         if (!this.active) return;
 
-        const ctx = renderer.ctx;
+        const ctx = renderer.ctx || renderer;
         ctx.save();
 
         ctx.fillStyle = (typeof CONFIG !== 'undefined' && CONFIG.COLORS && CONFIG.COLORS.ACCENT_RED) ? CONFIG.COLORS.ACCENT_RED : '#8b0000';
