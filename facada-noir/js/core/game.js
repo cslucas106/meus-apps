@@ -85,7 +85,7 @@ class Game {
             () => {
                 console.log('Assets carregados com sucesso.');
                 this.initComponents();
-                
+
                 // Remove tela de carregamento
                 const loadingScreen = document.getElementById('loading-screen');
                 if (loadingScreen) {
@@ -128,8 +128,15 @@ class Game {
             this.dialogue.init(dialoguesJson);
         }
 
+        // Apelidos: outros arquivos usam estes nomes
+        this.dialogueSystem = this.dialogue;
+        this.investigationSystem = this.investigation;
+        this.investigation.discoverClue = (id, data) => this.investigation.addClue((data && data.clueId) || id);
+        window.Input = this.input;
+
         // Instancia UI & HUD
         if (window.HUD) this.hud = new window.HUD();
+        if (this.hud && !this.hud.showNotification) this.hud.showNotification = (t) => this.hud.showPrompt(t);
         if (window.DialogueBox) this.dialogueBox = new window.DialogueBox();
         if (window.NotebookUI) this.notebook = new window.NotebookUI();
         if (window.MenuUI) this.menuUI = new window.MenuUI();
@@ -166,11 +173,20 @@ class Game {
             exit: () => {},
             update: (dt) => {
                 this.playTime += dt;
+                // Conversa em andamento: só ela é atualizada (toque à direita avança)
+                if (this.dialogue && this.dialogue.active) {
+                    this.dialogue.update(dt);
+                    return;
+                }
                 if (this.currentScene && typeof this.currentScene.update === 'function') {
                     this.currentScene.update(dt, this);
                 }
+                this.nearTarget = this.findNearTarget();
+                if (this.nearTarget && this.input.wasPressed('interact')) {
+                    this.interactWith(this.nearTarget);
+                }
                 if (this.hud && typeof this.hud.update === 'function') {
-                    this.hud.update(dt, this);
+                    this.hud.update(dt, this.player);
                 }
                 if (this.transition && typeof this.transition.update === 'function') {
                     this.transition.update(dt);
@@ -181,7 +197,21 @@ class Game {
                     this.currentScene.draw(ctx, this.renderer);
                 }
                 if (this.hud && typeof this.hud.draw === 'function') {
-                    this.hud.draw(this.renderer);
+                    this.hud.draw(this.renderer, this.player, this);
+                }
+                if (this.nearTarget && !(this.dialogue && this.dialogue.active)) {
+                    const t = this.nearTarget;
+                    ctx.save();
+                    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                    ctx.fillRect(this.canvas.width / 2 - 220, this.canvas.height - 70, 440, 36);
+                    ctx.fillStyle = '#f4f4f4';
+                    ctx.font = '16px "Courier New", monospace';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Toque à direita: ' + (t.prompt || t.name || 'interagir'), this.canvas.width / 2, this.canvas.height - 47);
+                    ctx.restore();
+                }
+                if (this.dialogue && this.dialogue.active && this.dialogueBox) {
+                    this.dialogueBox.draw(ctx, this.dialogue);
                 }
                 if (this.transition && typeof this.transition.draw === 'function') {
                     this.transition.draw(this.renderer);
@@ -198,6 +228,7 @@ class Game {
                 this.stateMachine.handleInput('keydown', e);
             }
         });
+
         // Toque no menu (celular): toque numa opção para escolher
         this.canvas.addEventListener('pointerdown', (e) => {
             if (!this.stateMachine || this.stateMachine.currentStateName !== 'menu' || !this.menuUI) return;
@@ -210,8 +241,35 @@ class Game {
                 if (Math.abs(y - (startY + i * 45 - 7)) < 24) { m.selectedOption = i; m.selectOption(); break; }
             }
         });
+
         // Entra no estado de menu inicial
         this.stateMachine.change('menu');
+    }
+
+    // Acha o NPC ou objeto mais perto do jogador (até 90 px)
+    findNearTarget() {
+        if (!this.currentScene || !this.player) return null;
+        const px = this.player.x + (this.player.width || 0) / 2;
+        const py = this.player.y + (this.player.height || 0) / 2;
+        let best = null, bd = 90;
+        for (const e of this.currentScene.entities) {
+            if (e === this.player || !e.active) continue;
+            const tags = e.tags || [];
+            if (!tags.includes('npc') && !tags.includes('interactable')) continue;
+            const d = Math.hypot(e.x + (e.width || 0) / 2 - px, e.y + (e.height || 0) / 2 - py);
+            if (d < bd) { bd = d; best = e; }
+        }
+        return best;
+    }
+
+    // Fala com o NPC ou usa o objeto
+    interactWith(t) {
+        if ((t.tags || []).includes('npc')) {
+            if (typeof t.interact === 'function') t.interact(this.player);
+            if (t.dialogueId) this.dialogue.startDialogue(t.dialogueId);
+        } else if (typeof t.interact === 'function') {
+            t.interact(this);
+        }
     }
 
     startNewGame() {
