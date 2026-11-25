@@ -129,3 +129,15 @@ class LightSystem {
 
 // Instância global de luzes
 window.lightSystem = new LightSystem();
+
+class Light extends Entity {
+    constructor(x, y, opts = {}) {
+        super(x, y, 1, 1, ['light']);
+        this.radius = opts.radius || 200;
+        this.color = opts.color || 'rgba(255,220,150,0.15)';
+        this.intensity = opts.intensity != null ? opts.intensity : 1;
+        this.flicker = !!opts.flicker;
+        window.lightSystem.addLight(this);
+    }
+}
+window.Light = Light;
