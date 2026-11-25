@@ -9,8 +9,8 @@ class Renderer {
     this.ctx = canvas.getContext('2d');
     
     // Resolução lógica base
-    this.width = CONFIG.CANVAS.WIDTH;
-    this.height = CONFIG.CANVAS.HEIGHT;
+    this.width = CONFIG.canvas.width;
+    this.height = CONFIG.canvas.height;
 
     // Efeito de Screen Shake
     this.shakeDuration = 0;
@@ -42,7 +42,7 @@ class Renderer {
   }
 
   clear() {
-    this.ctx.fillStyle = CONFIG.COLORS.BLACK;
+    this.ctx.fillStyle = CONFIG.colors.black;
     this.ctx.fillRect(0, 0, this.width, this.height);
   }
 
@@ -110,7 +110,7 @@ class Renderer {
     this.ctx.closePath();
   }
 
-  drawText(text, x, y, font = '16px Courier New', color = CONFIG.COLORS.WHITE, align = 'left') {
+  drawText(text, x, y, font = '16px Courier New', color = CONFIG.colors.white, align = 'left') {
     this.ctx.font = font;
     this.ctx.fillStyle = color;
     this.ctx.textAlign = align;
