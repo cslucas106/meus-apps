@@ -28,7 +28,7 @@
             "portrait": "MILLER",
             "text": "Circule, detetive. Aqui não há nada para o senhor ver. A delegacia cuida disso.",
             "choices": [
-                * { "text": "Eu faço minhas próprias regras, Miller.", "next": "bater" },
+                { "text": "Eu faço minhas próprias regras, Miller.", "next": "bater" },
                 { "text": "Entendido. Estou de saída.", "next": null }
             ]
         },
