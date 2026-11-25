@@ -137,6 +137,8 @@ class InputManager {
                 this.touch.currentX = touch.clientX;
                 this.touch.currentY = touch.clientY;
                 this.touch.vector = { x: 0, y: 0 };
+            } else if (touch.clientX >= window.innerWidth / 2) {
+                this._tap = true;
             }
         }, { passive: false });
 
