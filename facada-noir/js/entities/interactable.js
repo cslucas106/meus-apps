@@ -5,9 +5,15 @@
 
 class Interactable extends Entity {
     constructor(x, y, type, data = {}) {
-        super(x, y, data.width || 32, data.height || 32);
+        // Aceita new Interactable(x, y, 'door', {...}) e também new Interactable(x, y, {type: 'door', ...})
+        if (type && typeof type === 'object') {
+            data = type;
+            type = data.type;
+        }
+        super(x, y, data.width || 32, data.height || 32, ['interactable']);
         this.type = type; // 'clue', 'door', 'item', 'corpse', 'note'
         this.data = data;
+        this.targetScene = data.targetScene || null;
         this.id = data.id || `interactable_${Math.random().toString(36).substr(2, 9)}`;
         this.name = data.name || 'Objeto';
         this.interacted = data.interacted || false;
