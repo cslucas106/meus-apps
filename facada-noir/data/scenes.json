@@ -1,0 +1,30 @@
+{
+    "rua-principal": {
+        "name": "Rua Principal",
+        "chapter": 1,
+        "music": "noir_ambience_1",
+        "bounds": { "width": 3000, "height": 2000 },
+        "spawn": { "x": 400, "y": 1000 }
+    },
+    "delegacia": {
+        "name": "Delegacia Central",
+        "chapter": 2,
+        "music": "noir_ambience_1",
+        "bounds": { "width": 2560, "height": 1440 },
+        "spawn": { "x": 200, "y": 700 }
+    },
+    "apartamento-vitima": {
+        "name": "Apartamento da Vítima",
+        "chapter": 3,
+        "music": "noir_ambience_1",
+        "bounds": { "width": 2560, "height": 1440 },
+        "spawn": { "x": 200, "y": 700 }
+    },
+    "submundo": {
+        "name": "Bar The Blue Note",
+        "chapter": 4,
+        "music": "noir_ambience_1",
+        "bounds": { "width": 2560, "height": 1440 },
+        "spawn": { "x": 200, "y": 700 }
+    }
+}
