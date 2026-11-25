@@ -202,6 +202,11 @@ class InputManager {
             }
         }
 
+        if (this._tap) {
+            this.actions.interact = true;
+            this._tap = false;
+        }
+
         // Integrar toque / joystick virtual nas ações de direção
         if (this.touch.active) {
             const threshold = 0.2;
