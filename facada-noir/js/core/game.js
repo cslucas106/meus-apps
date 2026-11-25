@@ -208,8 +208,8 @@ class Game {
         this.playTime = 0;
 
         // Cria o Jogador se a classe Player existir
-        if (window.Player) {
-            this.player = new window.Player(400, 300);
+        if (typeof Player !== 'undefined') {
+            this.player = new Player(400, 300);
         }
 
         // Carrega a cena inicial (Rua Principal)
