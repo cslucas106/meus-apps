@@ -1,0 +1,26 @@
+{
+    "chave_delegacia": {
+        "name": "Chave da Delegacia",
+        "description": "Uma chave enferrujada com um chaveiro de couro velho. Abre a porta lateral da delegacia.",
+        "combinableWith": null,
+        "result": null
+    },
+    "lanterna": {
+        "name": "Lanterna de Bolso",
+        "description": "Lanterna de metal pesado. A pilha está fraca, mas ainda corta a neblina da rua.",
+        "combinableWith": null,
+        "result": null
+    },
+    "carta_misteriosa": {
+        "name": "Carta Rasgada",
+        "description": "Um bilhete manchado de sangue. O texto diz apenas: 'Eles sabem o que você viu no cais'.",
+        "combinableWith": null,
+        "result": null
+    },
+    "faca_do_crime": {
+        "name": "Estilete com Sangue Seco",
+        "description": "A arma do crime encontrada no beco escuro. As impressões digitais foram limpas.",
+        "combinableWith": null,
+        "result": null
+    }
+}
