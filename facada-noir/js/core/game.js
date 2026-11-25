@@ -143,9 +143,10 @@ class Game {
         if (window.TransitionSystem) this.transition = new window.TransitionSystem();
 
         // Registra cenas disponíveis
-        if (window.RuaPrincipalScene) {
-            this.scenes['rua-principal'] = new window.RuaPrincipalScene();
-        }
+        if (window.RuaPrincipalScene) this.scenes['rua-principal'] = new window.RuaPrincipalScene();
+        if (window.DelegaciaScene) this.scenes['delegacia'] = new window.DelegaciaScene();
+        if (window.ApartamentoVitimaScene) this.scenes['apartamento-vitima'] = new window.ApartamentoVitimaScene();
+        if (window.SubmundoScene) this.scenes['submundo'] = new window.SubmundoScene();
 
         // Registra estados na StateMachine
         this.stateMachine.add('menu', {
@@ -182,7 +183,9 @@ class Game {
                     this.currentScene.update(dt, this);
                 }
                 this.nearTarget = this.findNearTarget();
-                if (this.nearTarget && this.input.wasPressed('interact')) {
+                if (this.skipInteract) {
+                    this.skipInteract = false;
+                } else if (this.nearTarget && this.input.wasPressed('interact')) {
                     this.interactWith(this.nearTarget);
                 }
                 if (this.hud && typeof this.hud.update === 'function') {
@@ -269,6 +272,7 @@ class Game {
             if (t.dialogueId) this.dialogue.startDialogue(t.dialogueId);
         } else if (typeof t.interact === 'function') {
             t.interact(this);
+            if (t.type === 'clue' && this.hud) this.hud.showPrompt('Pista encontrada: ' + t.name);
         }
     }
 
@@ -310,6 +314,8 @@ class Game {
             this.currentScene.teardown(this);
         }
 
+        if (window.lightSystem && typeof window.lightSystem.clear === 'function') window.lightSystem.clear();
+        this.skipInteract = true;
         this.currentSceneKey = sceneKey;
         this.currentScene = this.scenes[sceneKey];
 
