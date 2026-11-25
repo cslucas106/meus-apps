@@ -3,55 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vida de Pescador - Noir Edition</title>
+    <title>Vida de Pescador</title>
     <link rel="stylesheet" href="style.css">
-    <script src="data.js"></script>
-    <script src="ui.js"></script>
-    <script src="entities.js"></script>
-    <script src="boat.js"></script>
-    <script src="physics.js"></script>
-    <script src="graphics.js"></script>
-    <script src="game.js"></script>
 </head>
 <body>
-    <div id="main-wrapper">
-        <!-- SVG Canvas -->
-        <svg id="game-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <div id="game-container">
+        <!-- Área SVG do jogo -->
+        <svg id="game-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
             <defs>
                 <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:#0a1a2a;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+                    <stop offset="0%" style="stop-color:#0a0a0a;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#06103a;stop-opacity:1" />
                 </linearGradient>
             </defs>
-            <!-- Group for Sky/Stars (Background) -->
-            <g id="layer-bg"></g>
-            <!-- Group for Fish -->
-            <g id="layer-fish"></g>
-            <!-- Group for Boats/Player -->
-            <g id="layer-boats"></g>
-            <!-- Group for Physics Line -->
-            <g id="layer-physics"></g>
+            
+            <g id="background-layer">
+                <!-- Ondas e fundo serão gerados aqui -->
+            </g>
+            
+            <g id="fog-layer">
+                <!-- Camada de névoa noir -->
+                <rect width="100%" height="100%" fill="#050505" opacity="0.5" />
+            </g>
+            
+            <g id="game-layer">
+                <!-- Barco, Peixes, Linha de pesca -->
+            </g>
         </svg>
 
-        <!-- UI Layer (Overlay) -->
+        <!-- Interface (UI) sobreposta -->
         <div id="ui-layer">
-            <div id="start-screen" class="screen active">
-                <h1>VIDA DE PESCADOR</h1>
-                <p>Pesca Caótica Noir</p>
-                <p>Toque em <b>cima</b> no barbante para puxar (tensão sobe).<br>Deslize em <b>baixo</b> aliviar (tensão desce).</p>
-                <button id="btn-start">ATIRAR ÁGUA</button>
+            <div id="hud">
+                <div class="stat-box">
+                    <span id="money-display">$0</span>
+                </div>
+                <div class="stat-box">
+                    <span id="inventory-display">Inventário: Vazio</span>
+                </div>
             </div>
-            <div id="hud" class="screen">
-                <div class="hud-bar">DINHEIRO: $<span id="money-display">0</span></div>
-                <div class="hud-bar">INVENTÁRIO: <span id="inventory-count">0</span></div>
+            
+            <!-- Telas de Menu e Notificação -->
+            <div id="screen-overlay" class="hidden">
+                <div id="start-screen" class="screen-content">
+                    <h1>Pesca Caótica</h1>
+                    <p>Toque nas pontas para navegar.<br>Toque para puxar, arraste para afastar.</p>
+                    <button id="start-btn">Iniciar Noite</button>
+                </div>
+                <div id="notification-screen" class="screen-content hidden">
+                    <h2 id="notif-title" class="notif-title"></h2>
+                    <p id="notif-desc"></p>
+                </div>
             </div>
-            <div id="game-over-screen" class="screen">
-                <h2 id="end-reason">NAUFRÁGIO</h2>
-                <p>Coordenadas: <span id="coords">0,0</span></p>
-                <button id="btn-restart">RESSUCITAR</button>
+
+            <!-- Barra de Tensão -->
+            <div class="tension-container">
+                <div class="tension-label">Tensão</div>
+                <div class="tension-bar-bg">
+                    <div id="tension-fill" class="tension-fill"></div>
+                </div>
             </div>
         </div>
     </div>
+
+    <script src="game.js"></script>
 </body>
 </html>
