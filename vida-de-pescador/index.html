@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vida de Pescador - Noir Edition</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="data.js"></script>
+    <script src="ui.js"></script>
+    <script src="entities.js"></script>
+    <script src="boat.js"></script>
+    <script src="physics.js"></script>
+    <script src="graphics.js"></script>
+    <script src="game.js"></script>
+</head>
+<body>
+    <div id="main-wrapper">
+        <!-- SVG Canvas -->
+        <svg id="game-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#0a1a2a;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <!-- Group for Sky/Stars (Background) -->
+            <g id="layer-bg"></g>
+            <!-- Group for Fish -->
+            <g id="layer-fish"></g>
+            <!-- Group for Boats/Player -->
+            <g id="layer-boats"></g>
+            <!-- Group for Physics Line -->
+            <g id="layer-physics"></g>
+        </svg>
+
+        <!-- UI Layer (Overlay) -->
+        <div id="ui-layer">
+            <div id="start-screen" class="screen active">
+                <h1>VIDA DE PESCADOR</h1>
+                <p>Pesca Caótica Noir</p>
+                <p>Toque em <b>cima</b> no barbante para puxar (tensão sobe).<br>Deslize em <b>baixo</b> aliviar (tensão desce).</p>
+                <button id="btn-start">ATIRAR ÁGUA</button>
+            </div>
+            <div id="hud" class="screen">
+                <div class="hud-bar">DINHEIRO: $<span id="money-display">0</span></div>
+                <div class="hud-bar">INVENTÁRIO: <span id="inventory-count">0</span></div>
+            </div>
+            <div id="game-over-screen" class="screen">
+                <h2 id="end-reason">NAUFRÁGIO</h2>
+                <p>Coordenadas: <span id="coords">0,0</span></p>
+                <button id="btn-restart">RESSUCITAR</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
