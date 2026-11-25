@@ -226,3 +226,15 @@ class InputManager {
         return !!this.keys[code] && !this.previousKeys[code];
     }
 }
+
+(function () {
+    const ALIAS = { shift: 'run', space: 'interact', enter: 'interact', action: 'interact', e: 'interact', f: 'flashlight', escape: 'pause', w: 'up', s: 'down', a: 'left', d: 'right', inventory: 'inventory', investigation: 'notebook' };
+    const nome = a => { const k = String(a).toLowerCase(); return ALIAS[k] || k; };
+    InputManager.prototype.isPressed = function (a) { return this.isDown(nome(a)); };
+    InputManager.prototype.isJustPressed = function (a) { return this.wasPressed(nome(a)); };
+    const d = InputManager.prototype.isDown;
+    InputManager.prototype.isDown = function (a) { return d.call(this, nome(a)); };
+    InputManager.prototype.isMouseDown = function () { return !!this.mouse.isDown; };
+    InputManager.prototype.isMouseJustPressed = function () { return !!this.mouse.wasPressed; };
+    InputManager.prototype.getMousePos = function () { return { x: this.mouse.canvasX || 0, y: this.mouse.canvasY || 0 }; };
+})();
