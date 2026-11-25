@@ -199,6 +199,19 @@ class Game {
             }
         });
 
+        // Toque no menu (celular): toque numa opção para escolher
+        this.canvas.addEventListener('pointerdown', (e) => {
+            if (!this.stateMachine || this.stateMachine.currentStateName !== 'menu' || !this.menuUI) return;
+            const r = this.canvas.getBoundingClientRect();
+            const y = (e.clientY - r.top) * (this.canvas.height / r.height);
+            const m = this.menuUI;
+            if (m.activeSubmenu) { m.activeSubmenu = null; return; }
+            const startY = this.canvas.height / 2 + 20;
+            for (let i = 0; i < m.options.length; i++) {
+                if (Math.abs(y - (startY + i * 45 - 7)) < 24) { m.selectedOption = i; m.selectOption(); break; }
+            }
+        });
+
         // Entra no estado de menu inicial
         this.stateMachine.change('menu');
     }
