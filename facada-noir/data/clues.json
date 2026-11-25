@@ -1,0 +1,14 @@
+{
+    "faca_ensanguentada": {
+        "name": "Estilete com Sangue Seco",
+        "description": "A arma do crime abandonada na lixeira do beco. O sangue ainda está fresco.",
+        "category": "evidencia",
+        "connections": ["testemunha_joe"]
+    },
+    "testemunha_joe": {
+        "name": "Álibi de Joe",
+        "description": "Joe viu um homem com sobretudo escuro correndo em direção ao cais.",
+        "category": "testemunha",
+        "connections": ["faca_ensanguentada"]
+    }
+}
