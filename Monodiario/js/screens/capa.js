@@ -6,8 +6,7 @@ const T = window.THREE;
 const TEMPLATE = `
 <div id="stage">
   <button class="back c" id="bk">← Voltar</button>
-  <div class="fab"><button class="c" id="sp">Girar 360°</button><button class="c go" id="tg">Abrir / fechar</button></div>
-  <div class="hint">Toque no livro para abrir ou fechar · arraste em qualquer direção para girar 360°</div>
+  <div class="fab"><button class="c" id="sp">Girar 360°</button><button class="c" id="tg">Abrir / fechar</button><button class="c go" id="sv">Salvar</button></div>
 </div>
 <div id="ui">
   <div id="tabs"></div>
@@ -114,6 +113,7 @@ $('wok').onclick=closeWheel; $('wh').onclick=e=>{if(e.target.id==='wh')closeWhee
   $('sp').onclick = () => book.spin();
   $('tg').onclick = () => book.setOpen(!book.isOpen());
   $('bk').onclick = () => { location.hash = '#/'; };
+  $('sv').onclick = () => { flush(); $('sv').textContent = 'Salvo ✓'; setTimeout(() => { location.hash = '#/'; }, 700); };
   ui();
   return () => { if (st) flush(); book.destroy(); };
 }

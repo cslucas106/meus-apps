@@ -12,7 +12,6 @@ export async function mount(root, ctx) {
         <button class="c" id="sp">Girar 360°</button>
         <button class="c go" id="cv">Capa</button>
       </div>
-      <div class="hint">Toque no livro para abrir · arraste em qualquer direção para girar 360°</div>
     </div>
     <div class="cta" id="cta"></div>`;
   const $ = (id) => root.querySelector('#' + id);
