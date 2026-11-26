@@ -20,7 +20,8 @@ const h = (tag, props = {}, ...kids) => {
   return e;
 };
 
-function capa(c, nome) {
+function capa(c, nome, thumb) {
+  if (thumb) return h('img', { class: 'capa-foto', src: thumb, alt: `Livro de ${nome}` });
   const m = METAIS[c.metal] || METAIS.prata;
   const livro = h('div', {
     class: `capa t-${TEXTURA[c.t] || 'liso'} np-${c.np || 'ie'}` + (c.e === 'moldura' ? ' moldura' : ''),
@@ -41,7 +42,7 @@ export async function mount(root) {
   for (let i = 0; i < lista.length; i += POR_FILA) {
     const fila = lista.slice(i, i + POR_FILA);
     body.append(h('div', { class: 'fila' },
-      h('div', { class: 'livros' }, fila.map((p) => capa(p.cover, p.nome))),
+      h('div', { class: 'livros' }, fila.map((p) => capa(p.cover, p.nome, p.thumb))),
       h('div', { class: 'tabua' }, fila.map((p) => h('span', { class: p.voce ? 'voce' : '' }, p.voce ? `${p.nome} ✦` : p.nome)))));
   }
   body.append(h('p', { class: 'enota' }, 'Perfis de teste: na próxima fase entram as pessoas do seu grupo.'));
