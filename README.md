@@ -3,4 +3,4 @@
 Repositório central de aplicativos, mini-apps e jogos criados no PocketCode.
 
 ## Apps Disponíveis
-- [Facada Noir](facads-noir/) - Jogo de arremesso de facas com temática noir e história.
+- [Monodiario](Moodiario/) - Jogo de registro de registro diario de sentimentos.
