@@ -42,6 +42,7 @@ export async function listEntries(mes) { // mes = 'AAAA-MM'
 
 export async function getCover() { return read('cover', null); }
 export async function saveCover(cfg) { write('cover', cfg); }
+export async function saveCoverThumb(dataUrl) { write('coverThumb', dataUrl); } // foto do livro 3D para a estante
 
 // Modo de teste: preenche ~90 dias anteriores com escolhas aleatórias (~15% em branco).
 export async function seedFake() {
@@ -73,7 +74,7 @@ const PERFIS_FALSOS = [
 ];
 
 export async function listShelf(groupId) { // groupId ainda não é usado na Fase 1
-  const meu = { id: getUser().id, nome: getUser().nome, voce: true, cover: { ...CAPA_PADRAO, ...(read('cover', null) || {}) } };
+  const meu = { id: getUser().id, nome: getUser().nome, voce: true, thumb: read('coverThumb', null), cover: { ...CAPA_PADRAO, ...(read('cover', null) || {}) } };
   return [meu, ...PERFIS_FALSOS.map((p) => ({ ...p, cover: { ...CAPA_PADRAO, ...p.cover } }))];
 }
 
