@@ -42,6 +42,8 @@ export async function listEntries(mes) { // mes = 'AAAA-MM'
 
 export async function getCover() { return read('cover', null); }
 export async function saveCover(cfg) { write('cover', cfg); }
+export async function getScenario() { return read('scenario', 'classico'); } // cenário da "casa" (vale para a estante; depois, para o início)
+export async function saveScenario(id) { write('scenario', id); }
 export async function saveCoverThumb(dataUrl) { write('coverThumb', dataUrl); } // foto do livro 3D para a estante
 
 // Modo de teste: preenche ~90 dias anteriores com escolhas aleatórias (~15% em branco).
