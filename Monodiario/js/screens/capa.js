@@ -6,7 +6,8 @@ const T = window.THREE;
 const TEMPLATE = `
 <div id="stage">
   <button class="back c" id="bk">← Voltar</button>
-  <div class="fab"><button class="c" id="sp">Girar 360°</button><button class="c" id="tg">Abrir / fechar</button><button class="c go" id="sv">Salvar</button></div>
+  <div class="fab"><button class="c go" id="sv">Salvar</button></div>
+  <div class="fab baixo"><button class="c" id="sp">Girar 360°</button><button class="c" id="tg">Abrir / fechar</button></div>
 </div>
 <div id="ui">
   <div id="tabs"></div>
