@@ -91,6 +91,7 @@ body[data-screen=hoje] #nav,body[data-screen=capa] #nav{display:none}
 .tabua span{text-align:center;font-size:.78rem;color:#f1e7d6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tabua .voce{color:#f3d98f;font-weight:600}
 .capa{position:relative;aspect-ratio:3/4;border-radius:4px 9px 9px 4px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;background-color:var(--cor);box-shadow:3px 4px 10px rgba(0,0,0,.5)}
+.capa-foto{display:block;width:100%;aspect-ratio:3/4;object-fit:contain;filter:drop-shadow(3px 4px 6px rgba(0,0,0,.5))}
 .capa::before{content:"";position:absolute;inset:0;pointer-events:none}
 .capa.t-grao::before{background:radial-gradient(rgba(255,255,255,.14) 1px,transparent 1.5px) 0 0/5px 5px,radial-gradient(rgba(0,0,0,.2) 1px,transparent 1.5px) 2px 2px/5px 5px}
 .capa.t-trama::before{background:repeating-linear-gradient(0deg,rgba(255,255,255,.1) 0 1px,transparent 1px 4px),repeating-linear-gradient(90deg,rgba(0,0,0,.14) 0 1px,transparent 1px 4px)}
