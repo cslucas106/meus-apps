@@ -405,12 +405,12 @@ return {
   setOpen, isOpen: () => want, escrever, showText,
   // Foto do livro FECHADO e de frente, fundo transparente, recortada rente ao livro (para a estante).
   snapshot(w = 600, h = 800){
-    const pr = renderer.getPixelRatio(), sv = shadow.visible;
+    const pr = renderer.getPixelRatio(), sv = shadow.visible, fov0 = camera.fov;
     try {
       shadow.visible = false;
       renderer.setPixelRatio(1); renderer.setSize(w, h, false);
-      camera.aspect = w / h; camera.updateProjectionMatrix();
-      pivot.rotation.y = 0; book.position.set(-.75, 0, 0); rig.rotation.set(.04, .25, 0);
+      camera.fov = 9; camera.aspect = w / h; camera.updateProjectionMatrix(); // lente longa: capa reta, sem as laterais
+      pivot.rotation.y = 0; book.position.set(-.75, 0, 0); rig.rotation.set(0, 0, 0);
       flap.rotation.y = 0; if (hook) hook.rotation.z = 0;
       ext = 1.3; place();
       renderer.render(scene, camera);
@@ -425,7 +425,7 @@ return {
       const o = document.createElement('canvas'); o.width = x1 - x0 + 1; o.height = y1 - y0 + 1;
       o.getContext('2d').drawImage(c, x0, y0, o.width, o.height, 0, 0, o.width, o.height);
       return o.toDataURL('image/webp', .9);
-    } finally { shadow.visible = sv; renderer.setPixelRatio(pr); fit(); }
+    } finally { shadow.visible = sv; camera.fov = fov0; camera.updateProjectionMatrix(); renderer.setPixelRatio(pr); fit(); }
   },
   spin(){ vy = 0; spinT = 0; },
   setDay(iso){ const [y,m,d] = iso.split('-').map(Number); pageDate = new Date(y, m-1, d); drawPages(frase && !typing ? frase : ''); },
