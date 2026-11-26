@@ -59,4 +59,22 @@ export async function seedFake() {
   return Object.keys(all).length;
 }
 
-// Ainda por fazer (etapas 5 a 7 do plano): getDump(tipo, periodo), listShelf(groupId), shareDump(groupId, mes)
+// Estante: livros lado a lado. Fase 1: o seu livro + perfis falsos. Só capa e nome (nunca o conteúdo).
+// Fase 4: vira fetch() para o Worker (listShelf(groupId) devolve só quem está no grupo).
+const CAPA_PADRAO = { m: 'trinco', cor: '#000000', e: 'nenhum', t: 'liso', metal: 'prata', txt: '', np: 'ie', pg: '#f6eedb', gl: 0 };
+const PERFIS_FALSOS = [
+  { id: 'f1', nome: 'Ana',   cover: { cor: '#7a1f2b', t: 'couro',    metal: 'ouro',   e: 'flor',    txt: 'Ana',             np: 'topo', pg: '#f6eedb' } },
+  { id: 'f2', nome: 'Bruno', cover: { cor: '#1f3b5c', t: 'croco',    metal: 'prata',  e: 'bussola', txt: 'Bruno',           np: 'baixo', pg: '#ffffff' } },
+  { id: 'f3', nome: 'Carla', cover: { cor: '#2f5d46', t: 'linho',    metal: 'cobre',  e: 'arvore',  txt: 'Diário da Carla', np: 'meio', pg: '#f7e7a1' } },
+  { id: 'f4', nome: 'Diego', cover: { cor: '#5a3a22', t: 'madeira',  metal: 'bronze', e: 'moldura', txt: '',                np: 'ie', pg: '#f6eedb' } },
+  { id: 'f5', nome: 'Elisa', cover: { cor: '#c9a5b8', t: 'veludo',   metal: 'ouro',   e: 'luas',    txt: 'Elisa',           np: 'topo', pg: '#f6dce0' } },
+  { id: 'f6', nome: 'Fábio', cover: { cor: '#222222', t: 'saffiano', metal: 'prata',  e: 'coroa',   txt: '',                np: 'ie', pg: '#e4e4e2' } },
+  { id: 'f7', nome: 'Gabi',  cover: { cor: '#d9a441', t: 'camurca',  metal: 'prata' , e: 'solua',   txt: 'Gabi',            np: 'id', pg: '#dbe7f5' } },
+];
+
+export async function listShelf(groupId) { // groupId ainda não é usado na Fase 1
+  const meu = { id: getUser().id, nome: getUser().nome, voce: true, cover: { ...CAPA_PADRAO, ...(read('cover', null) || {}) } };
+  return [meu, ...PERFIS_FALSOS.map((p) => ({ ...p, cover: { ...CAPA_PADRAO, ...p.cover } }))];
+}
+
+// Ainda por fazer: getDump(tipo, periodo) no api (hoje o cálculo roda direto nas telas) e shareDump(groupId, mes)
