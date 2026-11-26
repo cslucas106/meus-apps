@@ -33,8 +33,7 @@ function capa(c, nome, thumb) {
   return livro;
 }
 
-export async function mount(root) {
-  const lista = await api.listShelf();
+function montarCSS(root, lista) { // plano B: estante antiga em CSS, se o WebGL falhar
   const body = h('div', { class: 'ebody' });
   root.append(
     h('header', { class: 'top' }, h('div', {}, h('h1', {}, 'Estante'), h('small', {}, 'Só a capa e o nome aparecem aqui'))),
@@ -46,4 +45,35 @@ export async function mount(root) {
       h('div', { class: 'tabua' }, fila.map((p) => h('span', { class: p.voce ? 'voce' : '' }, p.voce ? `${p.nome} ✦` : p.nome)))));
   }
   body.append(h('p', { class: 'enota' }, 'Perfis de teste: na próxima fase entram as pessoas do seu grupo.'));
+}
+
+export async function mount(root) {
+  const lista = await api.listShelf();
+  if (!window.THREE) return montarCSS(root, lista);
+  const { createShelf, CENARIOS } = await import('../estante3d.js');
+  root.innerHTML = '<header class="top"><div><h1>Estante</h1><small>Só a capa e o nome aparecem aqui</small></div></header><div class="estage"></div><div class="cenas"></div><div class="cta"></div>';
+  const stage = root.querySelector('.estage'), cenas = root.querySelector('.cenas'), cta = root.querySelector('.cta');
+  const onPick = (b) => {
+    cta.replaceChildren();
+    if (!b) return;
+    if (b.voce) {
+      const bt = h('button', { class: 'c go' }, 'Editar minha capa');
+      bt.onclick = () => { location.hash = '#/capa'; };
+      cta.append(bt);
+    } else cta.append(h('span', {}, `${b.nome} · pedir para ver: em breve`));
+  };
+  let shelf;
+  try { shelf = await createShelf(stage, { books: lista, scenario: await api.getScenario(), onPick }); } catch (e) {
+    console.error(e); root.replaceChildren(); return montarCSS(root, lista);
+  }
+  const atual = await api.getScenario();
+  CENARIOS.forEach((c) => {
+    const bt = h('button', { class: 'c' + (c.id === atual ? ' on' : '') }, c.nome);
+    bt.onclick = () => {
+      shelf.setScenario(c.id); api.saveScenario(c.id);
+      cenas.querySelectorAll('.c').forEach((x) => x.classList.toggle('on', x === bt));
+    };
+    cenas.append(bt);
+  });
+  return () => shelf.destroy();
 }
