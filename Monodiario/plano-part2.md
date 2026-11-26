@@ -20,9 +20,11 @@ Continuação do `plano.md`. Aqui está só o que ainda não foi feito, mais as 
 
 ## 2. Decisões em aberto (decidir antes de programar)
 
-1. **O que é o carimbo do mês?**
-   O `plano.md` diz que o amigo vê 12 quadrados com o sentimento que mais apareceu. A ideia nova fala em "dump carimbado no mês". Precisamos escolher uma coisa só: o carimbo é o dump, ou é o sentimento do mês?
-   Regra já combinada: o mês só ganha carimbo com **no mínimo 5 dias registrados**. Meses abaixo disso ficam sem carimbo.
+1. ~~O que é o carimbo do mês?~~ **Decidido: o carimbo é o dump do mês.**
+   - O dump do mês aparece como um **carimbo em cima do mês** no livro aberto.
+   - Regra: o mês só ganha carimbo com **no mínimo 5 dias registrados**. Meses abaixo disso ficam sem carimbo.
+   - O `plano.md` (regra 8 e seção 3.2) ainda fala em "12 quadrados com o sentimento predominante". Deve ser atualizado: os quadrados viram os carimbos.
+   - Ainda a definir o desenho do carimbo. Sugestão: emoji + nome do sentimento que mais apareceu no mês (como já estava nos quadrados), com cara de carimbo (borda, leve inclinação, cor do sentimento). Nada de dias nem palavras.
 
 2. **Cenários da "casa".**
    Quantos cenários vão existir? Serão só visuais ou desbloqueáveis (por sequência de dias, por exemplo)? O cenário escolhido vale para a estante **e** para a página inicial.
@@ -50,7 +52,9 @@ Checklist do `plano.md`, com o estado atual:
 
 Também falta:
 - [ ] **Página inicial com cenário**: trocar o "livro flutuando no nada" por uma cena (mesa de madeira, luz quente), usando o mesmo cenário escolhido na estante.
-- [ ] **Livro aberto de outra pessoa**: duas páginas, 6 meses em cada, com carimbo nos meses que passaram da regra dos 5 dias (depois da decisão 1).
+- [ ] **Carimbo do dump no mês**: desenhar o carimbo (borda, inclinação, cor do sentimento) e mostrar nos meses com 5+ dias.
+- [ ] **Livro aberto de outra pessoa**: duas páginas, 6 meses em cada, com o carimbo nos meses que passaram da regra dos 5 dias.
+- [ ] Atualizar o `plano.md` (regra 8 e seção 3.2): quadrados viram carimbos.
 - [ ] **Lombada** com o nome (e depois o ano), para a estante.
 - [ ] Atualizar o `README.md` com o que já funciona.
 - [ ] Apagar o CSS que sobrou dos avisos antigos (`.hint`).
@@ -130,16 +134,16 @@ Tudo do `plano.md` (seção 7) continua valendo. Acrescentar:
 - **Gestos do Telegram** podem atrapalhar a rolagem (ver Fase 3).
 - **Virada do ano em fusos diferentes:** a cópia congelada precisa sair no fuso de cada pessoa, não no do servidor.
 - **Mês sem 5 dias:** decidir se aparece alguma marca ("poucos registros") ou só fica sem carimbo.
-- **Three.js r128** é antigo. Funciona, mas atualizar exigiria rever o 3D todo.
+- **Three.js r128** é de 2021. Funciona bem. Atualizar não exige refazer o 3D, mas muda luz e cores, então os cenários e a capa precisariam de reajuste e novo teste. Só vale se o 3D ficar pesado no Telegram.
 
 ---
 
 ## 10. Ordem sugerida
 
-1. Decidir os itens da seção 2.
+1. Decidir os itens que sobraram na seção 2 (cenários, virada do ano, acesso).
 2. Página inicial com o cenário da estante.
 3. Conferir Folhear e Dump (estado real) e terminar o que faltar.
-4. Livro aberto de outra pessoa (duas páginas, carimbos).
+4. Carimbo do dump e livro aberto de outra pessoa (duas páginas).
 5. Lombada com nome e ano.
 6. Fase 2: Worker + D1 (incluindo foto da capa e anos guardados).
 7. Fase 3: Mini App do Telegram.
