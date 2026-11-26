@@ -79,3 +79,6 @@ body[data-screen=hoje] #nav,body[data-screen=capa] #nav{display:none}
 .dnota{margin:10px 0 0;font-size:.8rem;opacity:.6;text-align:center}
 .dfoot{padding:12px 16px 14px;border-top:1px solid var(--line);background:var(--panel);font-family:var(--sans)}
 .dfoot:empty{display:none}
+.dtabs{display:flex;gap:8px;justify-content:center;padding:0 0 10px}
+.dtab{height:38px;padding:0 22px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:inherit;font:500 .86rem var(--sans);opacity:.6;cursor:pointer}
+.dtab.on{opacity:1;background:rgba(216,178,90,.18);border-color:var(--gold);color:#f3d98f}
