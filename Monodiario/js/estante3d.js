@@ -3,6 +3,7 @@
 const T = window.THREE;
 
 const POR_FILA = 3, ALT = 1.25, PASSO = 1.78, LARG = 3.6, TAB = 0.14, PROF = 0.7, CEL = 1.12;
+const rnd = (n) => { const v = Math.sin(n * 127.1 + 311.7) * 43758.5453; return v - Math.floor(v); }; // sorteio fixo (a estante não muda a cada abertura)
 
 const METAIS = {
   ouro: ['#f6dd9e', '#c9a24e', '#f0d58a'], prata: ['#ffffff', '#aab0b8', '#eef1f5'],
@@ -12,12 +13,12 @@ const EMBLEMA = { luas: '☾', arvore: '❦', solua: '☼', mandala: '❂', flor
 
 // Para criar outro cenário, basta copiar um bloco abaixo (e, se quiser, um desenho novo de parede em parede()).
 export const CENARIOS = [
-  { id: 'classico', nome: 'Biblioteca', fundo: '#1c120b', madeira: 0x5a3a22, rotulo: '#f1e7d6', tint: 0xffffff,
-    hemi: [0xffe9c8, 0x2a1a0e, 0.95], dir: [0xffd9a0, 0.85], lampada: null },
-  { id: 'sala', nome: 'Sala clara', fundo: '#e9dcc6', madeira: 0xb08457, rotulo: '#3a2a1a', tint: 0xffffff,
-    hemi: [0xffffff, 0xd8c8b0, 0.7], dir: [0xffffff, 0.28], lampada: null },
-  { id: 'noite', nome: 'Noite', fundo: '#0c1128', madeira: 0x4a3426, rotulo: '#f1e7d6', tint: 0xd5dcff,
-    hemi: [0x9fb0ff, 0x10142a, 0.7], dir: [0x8aa0ff, 0.3], lampada: [0xffb868, 2.4] },
+  { id: 'classico', nome: 'Biblioteca', fundo: '#1c120b', madeira: '#5a3a22', rotulo: '#f1e7d6', tint: 0xffffff,
+    hemi: [0xffe9c8, 0x2a1a0e, 0.55], dir: [0xffd9a0, 1.0], lampada: null },
+  { id: 'sala', nome: 'Sala clara', fundo: '#e9dcc6', madeira: '#b08457', rotulo: '#3a2a1a', tint: 0xffffff,
+    hemi: [0xffffff, 0xd8c8b0, 0.62], dir: [0xfff4e0, 0.6], lampada: null },
+  { id: 'noite', nome: 'Noite', fundo: '#0c1128', madeira: '#4a3426', rotulo: '#f1e7d6', tint: 0xd5dcff,
+    hemi: [0x9fb0ff, 0x10142a, 0.5], dir: [0x8aa0ff, 0.45], lampada: [0xffb868, 2.4] },
 ];
 
 function parede(id) { // textura que se repete na parede atrás da estante
@@ -67,7 +68,7 @@ function capaCanvas(c = {}, nome = '') { // desenho de reserva, para quem ainda 
   const W = 300, H = 400, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const x = cv.getContext('2d'), m = METAIS[c.metal] || METAIS.prata;
   const metal = (X0, Y0, X1, Y1) => { const g = x.createLinearGradient(X0, Y0, X1, Y1); g.addColorStop(0, m[0]); g.addColorStop(0.55, m[1]); g.addColorStop(1, m[2]); return g; };
-  rr(x, 4, 4, W - 8, H - 8, [8, 16, 16, 8]); x.save(); x.clip();
+  x.save();
   x.fillStyle = c.cor || '#3a2a1a'; x.fillRect(0, 0, W, H);
   for (let i = 0; i < 500; i++) { x.fillStyle = Math.random() < 0.5 ? 'rgba(255,255,255,.07)' : 'rgba(0,0,0,.1)'; x.fillRect(Math.random() * W, Math.random() * H, 2, 2); }
   const sp = x.createLinearGradient(0, 0, 46, 0);
@@ -89,6 +90,48 @@ function capaCanvas(c = {}, nome = '') { // desenho de reserva, para quem ainda 
   return cv;
 }
 
+function madeira(hex, vert) { // veios de madeira
+  const W = 512, H = 128, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const x = cv.getContext('2d');
+  x.fillStyle = hex; x.fillRect(0, 0, W, H);
+  for (let i = 0; i < 70; i++) {
+    const a = Math.random() * 0.16;
+    x.fillStyle = Math.random() < 0.5 ? `rgba(0,0,0,${a})` : `rgba(255,235,200,${a * 0.7})`;
+    x.fillRect(0, Math.random() * H, W, Math.random() * 2.2 + 0.4);
+  }
+  x.strokeStyle = 'rgba(0,0,0,.10)'; x.lineWidth = 1;
+  for (let i = 0; i < 10; i++) {
+    const y0 = Math.random() * H; x.beginPath(); x.moveTo(0, y0);
+    for (let u = 0; u <= W; u += 32) x.lineTo(u, y0 + Math.sin(u / 60 + i) * 2.5);
+    x.stroke();
+  }
+  const t = new T.CanvasTexture(cv);
+  if (vert) { t.center.set(0.5, 0.5); t.rotation = Math.PI / 2; }
+  return t;
+}
+
+function paginas(cor, tipo) { // borda do livro: folhas no meio e as capas nas pontas
+  const S = 128, cv = document.createElement('canvas'); cv.width = cv.height = S;
+  const x = cv.getContext('2d');
+  x.fillStyle = '#efe6d2'; x.fillRect(0, 0, S, S);
+  x.strokeStyle = 'rgba(120,100,70,.28)'; x.lineWidth = 1;
+  for (let i = 8; i < S - 8; i += 3) { x.beginPath(); if (tipo === 'v') { x.moveTo(i, 0); x.lineTo(i, S); } else { x.moveTo(0, i); x.lineTo(S, i); } x.stroke(); }
+  x.fillStyle = cor;
+  if (tipo === 'v') { x.fillRect(0, 0, 9, S); x.fillRect(S - 9, 0, 9, S); } else { x.fillRect(0, 0, S, 9); x.fillRect(0, S - 9, S, 9); }
+  return new T.CanvasTexture(cv);
+}
+
+function lombada(cor, m) { // lateral do livro com duas faixas de metal
+  const W = 64, H = 256, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const x = cv.getContext('2d');
+  x.fillStyle = cor; x.fillRect(0, 0, W, H);
+  const g = x.createLinearGradient(0, 0, W, 0); g.addColorStop(0, 'rgba(0,0,0,.4)'); g.addColorStop(0.5, 'rgba(255,255,255,.08)'); g.addColorStop(1, 'rgba(0,0,0,.4)');
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+  const mg = x.createLinearGradient(0, 0, W, 0); mg.addColorStop(0, m[0]); mg.addColorStop(0.55, m[1]); mg.addColorStop(1, m[2]);
+  x.fillStyle = mg; [24, 34, H - 34, H - 24].forEach((y) => x.fillRect(0, y, W, 4));
+  return new T.CanvasTexture(cv);
+}
+
 function loadImg(url) {
   return new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = url; });
 }
@@ -101,18 +144,10 @@ async function texturaLivro(b) { // foto do livro 3D se existir; senão, desenho
   return { tex: t, aspect: src.width / src.height };
 }
 
-function contato() { // sombrinha de contato embaixo de cada livro
-  const cv = document.createElement('canvas'); cv.width = cv.height = 128;
-  const x = cv.getContext('2d'), g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
-  g.addColorStop(0, 'rgba(0,0,0,.55)'); g.addColorStop(1, 'rgba(0,0,0,0)');
-  x.fillStyle = g; x.fillRect(0, 0, 128, 128);
-  return new T.CanvasTexture(cv);
-}
-
 function limpa(g) {
   for (const o of [...g.children]) {
     g.remove(o);
-    o.traverse((n) => { if (n.geometry) n.geometry.dispose(); const m = n.material; if (m) { if (m.map) m.map.dispose(); m.dispose(); } });
+    o.traverse((n) => { if (n.geometry) n.geometry.dispose(); [].concat(n.material || []).forEach((m) => { if (m.map) m.map.dispose(); m.dispose(); }); });
   }
 }
 
@@ -122,12 +157,13 @@ export async function createShelf(stage, opts = {}) {
   let sc = CENARIOS.find((c) => c.id === opts.scenario) || CENARIOS[0];
   const renderer = new T.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
   const el = renderer.domElement;
   stage.prepend(el);
 
-  const scene = new T.Scene(), camera = new T.PerspectiveCamera(30, 1, 0.1, 60);
+  const scene = new T.Scene(), camera = new T.PerspectiveCamera(42, 1, 0.1, 60);
   const env = new T.Group(), livros = new T.Group(); scene.add(env, livros);
-  const items = [], ray = new T.Raycaster(), ndc = new T.Vector2(), contatoTex = contato();
+  const items = [], ray = new T.Raycaster(), ndc = new T.Vector2();
   let alive = true, raf = 0, need = true, camY = 1e9, vel = 0, drag = null, moved = 0, lastMove = 0;
   let dist = 8, visH = 4, sel = -1, topY = 0, botY = 0, last = performance.now();
 
@@ -142,29 +178,40 @@ export async function createShelf(stage, opts = {}) {
     dist = Math.max(((LARG + 2 * TAB + 0.8) / 2) / (t * camera.aspect), 1.5 / t);
     visH = 2 * dist * t; camera.position.z = dist; limita(); need = true;
   }
+  const std = (o) => new T.MeshStandardMaterial(Object.assign({ roughness: 0.75, metalness: 0 }, o));
 
   function monta() { // parede, estante de madeira, luzes e nomes: tudo o que muda com o cenário
     limpa(env);
     stage.style.background = sc.fundo;
     const rows = Math.max(1, Math.ceil(books.length / POR_FILA));
-    topY = ALT + 0.3 + TAB; botY = -(rows - 1) * PASSO - TAB;
+    const coroa = 0.12, plinto = 0.22, cT = ALT + 0.3; // cT = altura do teto da primeira prateleira
+    topY = cT + TAB + coroa; botY = -(rows - 1) * PASSO - TAB - plinto;
     const H = topY - botY, cy = (topY + botY) / 2;
+    const yIn0 = botY + plinto, yIn1 = cT + TAB, Hu = yIn1 - yIn0, cyU = (yIn0 + yIn1) / 2;
 
     env.add(new T.HemisphereLight(sc.hemi[0], sc.hemi[1], sc.hemi[2]));
-    const d = new T.DirectionalLight(sc.dir[0], sc.dir[1]); d.position.set(-2, 4, 6); env.add(d);
-    if (sc.lampada) { const p = new T.PointLight(sc.lampada[0], sc.lampada[1], 7); p.position.set(1.3, topY - 0.4, 1.6); env.add(p); }
+    const d = new T.DirectionalLight(sc.dir[0], sc.dir[1]);
+    d.position.set(-2.5, cy + 4, 6); d.target.position.set(0, cy, 0); env.add(d, d.target);
+    d.castShadow = true; d.shadow.mapSize.set(2048, 2048); d.shadow.bias = -0.0006;
+    const sh = d.shadow.camera; sh.left = -3.6; sh.right = 3.6; sh.top = H / 2 + 2.5; sh.bottom = -(H / 2 + 2.5); sh.near = 1; sh.far = 18; sh.updateProjectionMatrix();
+    if (sc.lampada) { const p = new T.PointLight(sc.lampada[0], sc.lampada[1], 7); p.position.set(1.3, topY - 0.4, 1.8); env.add(p); }
 
     const pw = 16, ph = H + 14, tex = parede(sc.id); tex.repeat.set(pw / 2, ph / 2);
     const wall = new T.Mesh(new T.PlaneGeometry(pw, ph), new T.MeshLambertMaterial({ map: tex }));
-    wall.position.set(0, cy, -PROF / 2 - 0.02); env.add(wall);
+    wall.position.set(0, cy, -PROF / 2 - 0.12); wall.receiveShadow = true; env.add(wall);
 
-    const wood = new T.MeshLambertMaterial({ color: sc.madeira });
-    const fundo = new T.Mesh(new T.PlaneGeometry(LARG, H), new T.MeshLambertMaterial({ color: new T.Color(sc.madeira).multiplyScalar(0.5) }));
-    fundo.position.set(0, cy, -PROF / 2 + 0.005); env.add(fundo);
-    const tabua = (w, h, x, y) => { const m = new T.Mesh(new T.BoxGeometry(w, h, PROF), wood); m.position.set(x, y, 0); env.add(m); };
-    for (let r = 0; r < rows; r++) tabua(LARG, TAB, 0, -r * PASSO - TAB / 2);
-    tabua(LARG, TAB, 0, topY - TAB / 2);
-    tabua(TAB, H, -(LARG + TAB) / 2, cy); tabua(TAB, H, (LARG + TAB) / 2, cy);
+    const escuro = '#' + new T.Color(sc.madeira).multiplyScalar(0.55).getHexString();
+    const fundo = new T.Mesh(new T.PlaneGeometry(LARG, Hu), std({ map: madeira(escuro, true) }));
+    fundo.position.set(0, cyU, -PROF / 2 + 0.005); fundo.receiveShadow = true; env.add(fundo);
+    const peca = (w, h, dp, x, y, vert) => {
+      const m = new T.Mesh(new T.BoxGeometry(w, h, dp), std({ map: madeira(sc.madeira, vert) }));
+      m.position.set(x, y, 0); m.castShadow = m.receiveShadow = true; env.add(m);
+    };
+    for (let r = 0; r < rows; r++) peca(LARG, TAB, PROF, 0, -r * PASSO - TAB / 2, false);   // prateleiras
+    peca(LARG, TAB, PROF, 0, cT + TAB / 2, false);                                            // teto
+    peca(LARG + 0.4, coroa, PROF + 0.12, 0, cT + TAB + coroa / 2, false);                     // moldura de cima
+    peca(LARG + TAB * 2 + 0.12, plinto, PROF + 0.1, 0, botY + plinto / 2, false);             // rodapé
+    peca(TAB, Hu, PROF, -(LARG + TAB) / 2, cyU, true); peca(TAB, Hu, PROF, (LARG + TAB) / 2, cyU, true); // laterais
 
     books.forEach((b, i) => {
       const r = Math.floor(i / POR_FILA), c = i % POR_FILA;
@@ -174,19 +221,31 @@ export async function createShelf(stage, opts = {}) {
     });
   }
 
-  function montaLivros(res) {
+  function tinge() { // cenário noturno deixa os livros levemente azulados
+    const t = new T.Color(sc.tint);
+    items.forEach((it) => it.mats.forEach((m) => m.color.copy(m.userData.base).multiply(t)));
+  }
+
+  function montaLivros(res) { // cada livro é uma caixa de verdade: capa na frente, folhas na borda, lombada de lado
     books.forEach((b, i) => {
       const { tex, aspect } = res[i];
-      const w = Math.min(1.0, ALT * aspect), r = Math.floor(i / POR_FILA), c = i % POR_FILA, x = (c - 1) * CEL, y = -r * PASSO;
-      const geo = new T.PlaneGeometry(w, ALT); geo.translate(0, ALT / 2, 0); // ponto de apoio na base do livro
-      const mesh = new T.Mesh(geo, new T.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.04, color: sc.tint }));
-      mesh.position.set(x, y, -0.05); mesh.userData.i = i; livros.add(mesh);
-      const sombra = new T.Mesh(geo, new T.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.04, color: 0x000000, opacity: 0.32 }));
-      sombra.position.set(x + 0.06, y - 0.02, -PROF / 2 + 0.02); sombra.scale.set(1.03, 1.03, 1); livros.add(sombra);
-      const cs = new T.Mesh(new T.PlaneGeometry(w * 1.05, 0.3), new T.MeshBasicMaterial({ map: contatoTex, transparent: true, depthWrite: false }));
-      cs.rotation.x = -Math.PI / 2; cs.position.set(x, y + 0.003, -0.02); livros.add(cs);
-      items.push({ mesh });
+      const h = ALT * (0.96 + rnd(i * 7 + 3) * 0.08), w = Math.min(1.0, h * aspect), dp = 0.15 + rnd(i * 3 + 1) * 0.1;
+      const r = Math.floor(i / POR_FILA), c = i % POR_FILA, x = (c - 1) * CEL + (rnd(i * 11 + 5) - 0.5) * 0.06, y = -r * PASSO;
+      const cor = (b.cover && b.cover.cor) || '#2a2a2a', metal = METAIS[b.cover && b.cover.metal] || METAIS.prata;
+      const base = (cor_) => new T.Color(cor_);
+      const mats = [
+        std({ map: paginas(cor, 'v') }), std({ map: lombada(cor, metal), roughness: 0.6 }),
+        std({ map: paginas(cor, 'h') }), std({ map: paginas(cor, 'h') }),
+        std({ map: tex, alphaTest: 0.5, roughness: 0.5 }), std({ color: base(cor), roughness: 0.7 }),
+      ];
+      mats.forEach((m, k) => { m.userData.base = k === 5 ? base(cor) : new T.Color(1, 1, 1); });
+      const geo = new T.BoxGeometry(w, h, dp); geo.translate(0, h / 2, 0); // apoio na base
+      const mesh = new T.Mesh(geo, mats); mesh.castShadow = mesh.receiveShadow = true;
+      const zBase = -PROF / 2 + 0.09 + dp / 2 + rnd(i * 13 + 7) * 0.1;
+      mesh.position.set(x, y, zBase); mesh.rotation.y = (rnd(i * 5 + 2) - 0.5) * 0.08; mesh.userData.i = i;
+      livros.add(mesh); items.push({ mesh, mats, zBase, zSel: PROF / 2 - dp / 2 + 0.05 });
     });
+    tinge();
   }
 
   let res;
@@ -199,8 +258,8 @@ export async function createShelf(stage, opts = {}) {
     const dt = Math.min((now - last) / 1000, 0.05); last = now;
     let sujo = need;
     if (!drag && Math.abs(vel) > 0.01) { camY += vel * dt; vel *= Math.exp(-dt * 4); limita(); sujo = true; } else if (!drag) vel = 0;
-    items.forEach((it, i) => { // o livro tocado avança um pouco
-      const alvo = i === sel ? 0.3 : -0.05, z = it.mesh.position.z;
+    items.forEach((it, i) => { // o livro tocado avança até a beira da prateleira
+      const alvo = i === sel ? it.zSel : it.zBase, z = it.mesh.position.z;
       if (Math.abs(alvo - z) > 0.001) { it.mesh.position.z = z + (alvo - z) * (1 - Math.exp(-dt * 12)); sujo = true; }
     });
     if (sujo) { camera.position.y = camY; renderer.render(scene, camera); need = false; }
@@ -210,8 +269,8 @@ export async function createShelf(stage, opts = {}) {
   el.addEventListener('pointermove', (e) => {
     if (!drag) return;
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag = { x: e.clientX, y: e.clientY }; moved += Math.abs(dx) + Math.abs(dy);
-    const u = visH / (el.clientHeight || 1), n = performance.now(), h = Math.max(0.008, (n - lastMove) / 1000); lastMove = n;
-    camY += dy * u; vel = vel * 0.5 + 0.5 * (dy * u) / h; vel = Math.max(-12, Math.min(12, vel)); limita(); need = true;
+    const u = visH / (el.clientHeight || 1), n = performance.now(), hh = Math.max(0.008, (n - lastMove) / 1000); lastMove = n;
+    camY += dy * u; vel = vel * 0.5 + 0.5 * (dy * u) / hh; vel = Math.max(-12, Math.min(12, vel)); limita(); need = true;
   });
   el.addEventListener('pointerup', (e) => {
     if (moved < 6) {
@@ -233,10 +292,10 @@ export async function createShelf(stage, opts = {}) {
   return {
     setScenario(id) {
       const novo = CENARIOS.find((c) => c.id === id); if (!novo) return;
-      sc = novo; monta(); items.forEach((it) => it.mesh.material.color.set(sc.tint)); fit();
+      sc = novo; monta(); tinge(); fit();
     },
     destroy() {
-      alive = false; cancelAnimationFrame(raf); ro.disconnect(); limpa(env); limpa(livros); contatoTex.dispose();
+      alive = false; cancelAnimationFrame(raf); ro.disconnect(); limpa(env); limpa(livros);
       renderer.dispose(); try { renderer.forceContextLoss(); } catch (e) { /* ignora */ } el.remove();
     },
   };
