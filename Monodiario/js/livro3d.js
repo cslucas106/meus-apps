@@ -403,6 +403,19 @@ fit(); build(); drawPages(''); raf = requestAnimationFrame(loop);
 return {
   cfg, build, paint, drawFoil,
   setOpen, isOpen: () => want, escrever, showText,
+  // Foto do livro FECHADO e de frente (fundo transparente), para a estante. Renderiza numa tela temporária de w x h.
+  snapshot(w = 300, h = 400){
+    const pr = renderer.getPixelRatio();
+    try {
+      renderer.setPixelRatio(1); renderer.setSize(w, h, false);
+      camera.aspect = w / h; camera.updateProjectionMatrix();
+      pivot.rotation.y = 0; book.position.set(0, 0, 0); rig.rotation.set(.04, .25, 0);
+      flap.rotation.y = 0; if (hook) hook.rotation.z = 0;
+      ext = 1.3; place();
+      renderer.render(scene, camera);
+      return renderer.domElement.toDataURL('image/webp', .92);
+    } finally { renderer.setPixelRatio(pr); fit(); }
+  },
   spin(){ vy = 0; spinT = 0; },
   setDay(iso){ const [y,m,d] = iso.split('-').map(Number); pageDate = new Date(y, m-1, d); drawPages(frase && !typing ? frase : ''); },
   destroy(){ alive = false; cancelAnimationFrame(raf); ro.disconnect(); renderer.dispose(); try { renderer.forceContextLoss(); } catch (e) {} el.remove(); },
