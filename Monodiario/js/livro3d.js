@@ -403,18 +403,29 @@ fit(); build(); drawPages(''); raf = requestAnimationFrame(loop);
 return {
   cfg, build, paint, drawFoil,
   setOpen, isOpen: () => want, escrever, showText,
-  // Foto do livro FECHADO e de frente (fundo transparente), para a estante. Renderiza numa tela temporária de w x h.
-  snapshot(w = 300, h = 400){
-    const pr = renderer.getPixelRatio();
+  // Foto do livro FECHADO e de frente, fundo transparente, recortada rente ao livro (para a estante).
+  snapshot(w = 600, h = 800){
+    const pr = renderer.getPixelRatio(), sv = shadow.visible;
     try {
+      shadow.visible = false;
       renderer.setPixelRatio(1); renderer.setSize(w, h, false);
       camera.aspect = w / h; camera.updateProjectionMatrix();
-      pivot.rotation.y = 0; book.position.set(0, 0, 0); rig.rotation.set(.04, .25, 0);
+      pivot.rotation.y = 0; book.position.set(-.75, 0, 0); rig.rotation.set(.04, .25, 0);
       flap.rotation.y = 0; if (hook) hook.rotation.z = 0;
       ext = 1.3; place();
       renderer.render(scene, camera);
-      return renderer.domElement.toDataURL('image/webp', .92);
-    } finally { renderer.setPixelRatio(pr); fit(); }
+      const src = renderer.domElement, c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const g = c.getContext('2d'); g.drawImage(src, 0, 0);
+      const d = g.getImageData(0, 0, w, h).data;
+      let x0 = w, y0 = h, x1 = 0, y1 = 0;
+      for (let y = 0; y < h; y++) for (let i = 0; i < w; i++) if (d[(y * w + i) * 4 + 3] > 24) { if (i < x0) x0 = i; if (i > x1) x1 = i; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+      if (x1 <= x0 || y1 <= y0) return c.toDataURL('image/webp', .9);
+      x0 = Math.max(0, x0 - 6); y0 = Math.max(0, y0 - 6); x1 = Math.min(w - 1, x1 + 6); y1 = Math.min(h - 1, y1 + 6);
+      const o = document.createElement('canvas'); o.width = x1 - x0 + 1; o.height = y1 - y0 + 1;
+      o.getContext('2d').drawImage(c, x0, y0, o.width, o.height, 0, 0, o.width, o.height);
+      return o.toDataURL('image/webp', .9);
+    } finally { shadow.visible = sv; renderer.setPixelRatio(pr); fit(); }
   },
   spin(){ vy = 0; spinT = 0; },
   setDay(iso){ const [y,m,d] = iso.split('-').map(Number); pageDate = new Date(y, m-1, d); drawPages(frase && !typing ? frase : ''); },
