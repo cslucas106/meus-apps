@@ -60,7 +60,7 @@ export async function mount(root) {
     }
     const canvas = h('canvas', { class: 'dcard' });
     desenhar(canvas, dados);
-    body.append(canvas);
+    body.append(h('div', { class: 'dwrap' }, canvas));
     if (!dados.fechado) body.append(h('p', { class: 'dnota' }, 'Mês em andamento: o resumo muda até o último dia.'));
     if (st.msg) foot.append(h('p', { class: 'msg' }, st.msg));
     const botoes = [];
