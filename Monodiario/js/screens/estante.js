@@ -47,7 +47,20 @@ function montarCSS(root, lista) { // plano B: estante antiga em CSS, se o WebGL 
   body.append(h('p', { class: 'enota' }, 'Perfis de teste: na próxima fase entram as pessoas do seu grupo.'));
 }
 
+async function gerarFoto() { // tira a foto do seu livro 3D num palco escondido (para quem ainda não salvou a capa)
+  const { createBook } = await import('../livro3d.js');
+  const box = document.createElement('div');
+  box.style.cssText = 'position:fixed;left:-9999px;top:0;width:360px;height:480px';
+  document.body.append(box);
+  try {
+    const bk = createBook(box, { cfg: (await api.getCover()) || {} });
+    const url = bk.snapshot(); bk.destroy();
+    await api.saveCoverThumb(url);
+  } finally { box.remove(); }
+}
+
 export async function mount(root) {
+  if (window.THREE && !(await api.getCoverThumb())) { try { await gerarFoto(); } catch (e) { console.error(e); } }
   const lista = await api.listShelf();
   if (!window.THREE) return montarCSS(root, lista);
   const { createShelf, CENARIOS } = await import('../estante3d.js');
