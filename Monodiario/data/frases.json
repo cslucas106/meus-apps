@@ -1,0 +1,420 @@
+{
+ "categorias": [
+  {
+   "id": "alegria",
+   "nome": "Alegria",
+   "emoji": "☀️",
+   "valencia": 2,
+   "cor": "#e8b93a"
+  },
+  {
+   "id": "animacao",
+   "nome": "Animação",
+   "emoji": "🎉",
+   "valencia": 2,
+   "cor": "#e0705a"
+  },
+  {
+   "id": "calma",
+   "nome": "Calma",
+   "emoji": "🌿",
+   "valencia": 1,
+   "cor": "#6fae8a"
+  },
+  {
+   "id": "gratidao",
+   "nome": "Gratidão",
+   "emoji": "🌸",
+   "valencia": 1,
+   "cor": "#d98fa6"
+  },
+  {
+   "id": "esperanca",
+   "nome": "Esperança",
+   "emoji": "🌱",
+   "valencia": 1,
+   "cor": "#8cbf5b"
+  },
+  {
+   "id": "coragem",
+   "nome": "Coragem",
+   "emoji": "⚡",
+   "valencia": 1,
+   "cor": "#e08a2e"
+  },
+  {
+   "id": "saudade",
+   "nome": "Saudade",
+   "emoji": "🍂",
+   "valencia": 0,
+   "cor": "#b07a4c"
+  },
+  {
+   "id": "ansiedade",
+   "nome": "Ansiedade",
+   "emoji": "🌀",
+   "valencia": -1,
+   "cor": "#8a78c2"
+  },
+  {
+   "id": "cansaco",
+   "nome": "Cansaço",
+   "emoji": "🌙",
+   "valencia": -1,
+   "cor": "#6d7fa8"
+  },
+  {
+   "id": "tristeza",
+   "nome": "Tristeza",
+   "emoji": "🌧️",
+   "valencia": -2,
+   "cor": "#3f6890"
+  },
+  {
+   "id": "abatimento",
+   "nome": "Abatimento",
+   "emoji": "🥀",
+   "valencia": -2,
+   "cor": "#7a4a5a"
+  },
+  {
+   "id": "raiva",
+   "nome": "Raiva",
+   "emoji": "🔥",
+   "valencia": -2,
+   "cor": "#c0392b"
+  }
+ ],
+ "frases": [
+  {
+   "id": "senti",
+   "texto": "Hoje eu senti:",
+   "opcoes": [
+    {
+     "id": "senti_calma",
+     "palavra": "calma",
+     "categoria": "calma"
+    },
+    {
+     "id": "senti_tristeza",
+     "palavra": "tristeza",
+     "categoria": "tristeza"
+    },
+    {
+     "id": "senti_alegria",
+     "palavra": "alegria",
+     "categoria": "alegria"
+    },
+    {
+     "id": "senti_cansaco",
+     "palavra": "cansaço",
+     "categoria": "cansaco"
+    },
+    {
+     "id": "senti_esperanca",
+     "palavra": "esperança",
+     "categoria": "esperanca"
+    },
+    {
+     "id": "senti_raiva",
+     "palavra": "raiva",
+     "categoria": "raiva"
+    },
+    {
+     "id": "senti_gratidao",
+     "palavra": "gratidão",
+     "categoria": "gratidao"
+    },
+    {
+     "id": "senti_ansiedade",
+     "palavra": "ansiedade",
+     "categoria": "ansiedade"
+    },
+    {
+     "id": "senti_animacao",
+     "palavra": "animação",
+     "categoria": "animacao"
+    },
+    {
+     "id": "senti_saudade",
+     "palavra": "saudade",
+     "categoria": "saudade"
+    },
+    {
+     "id": "senti_coragem",
+     "palavra": "coragem",
+     "categoria": "coragem"
+    },
+    {
+     "id": "senti_abatimento",
+     "palavra": "abatimento",
+     "categoria": "abatimento"
+    }
+   ]
+  },
+  {
+   "id": "estou",
+   "texto": "Estou:",
+   "opcoes": [
+    {
+     "id": "estou_calma",
+     "palavra": "calmo(a)",
+     "categoria": "calma"
+    },
+    {
+     "id": "estou_tristeza",
+     "palavra": "triste",
+     "categoria": "tristeza"
+    },
+    {
+     "id": "estou_alegria",
+     "palavra": "feliz",
+     "categoria": "alegria"
+    },
+    {
+     "id": "estou_cansaco",
+     "palavra": "cansado(a)",
+     "categoria": "cansaco"
+    },
+    {
+     "id": "estou_esperanca",
+     "palavra": "esperançoso(a)",
+     "categoria": "esperanca"
+    },
+    {
+     "id": "estou_raiva",
+     "palavra": "irritado(a)",
+     "categoria": "raiva"
+    },
+    {
+     "id": "estou_gratidao",
+     "palavra": "grato(a)",
+     "categoria": "gratidao"
+    },
+    {
+     "id": "estou_ansiedade",
+     "palavra": "ansioso(a)",
+     "categoria": "ansiedade"
+    },
+    {
+     "id": "estou_animacao",
+     "palavra": "animado(a)",
+     "categoria": "animacao"
+    },
+    {
+     "id": "estou_saudade",
+     "palavra": "saudoso(a)",
+     "categoria": "saudade"
+    },
+    {
+     "id": "estou_coragem",
+     "palavra": "corajoso(a)",
+     "categoria": "coragem"
+    },
+    {
+     "id": "estou_abatimento",
+     "palavra": "abatido(a)",
+     "categoria": "abatimento"
+    }
+   ]
+  },
+  {
+   "id": "fiquei",
+   "texto": "Fiquei muito:",
+   "opcoes": [
+    {
+     "id": "fiquei_calma",
+     "palavra": "tranquilo(a)",
+     "categoria": "calma"
+    },
+    {
+     "id": "fiquei_tristeza",
+     "palavra": "chateado(a)",
+     "categoria": "tristeza"
+    },
+    {
+     "id": "fiquei_alegria",
+     "palavra": "feliz",
+     "categoria": "alegria"
+    },
+    {
+     "id": "fiquei_cansaco",
+     "palavra": "cansado(a)",
+     "categoria": "cansaco"
+    },
+    {
+     "id": "fiquei_esperanca",
+     "palavra": "esperançoso(a)",
+     "categoria": "esperanca"
+    },
+    {
+     "id": "fiquei_raiva",
+     "palavra": "irritado(a)",
+     "categoria": "raiva"
+    },
+    {
+     "id": "fiquei_gratidao",
+     "palavra": "grato(a)",
+     "categoria": "gratidao"
+    },
+    {
+     "id": "fiquei_ansiedade",
+     "palavra": "ansioso(a)",
+     "categoria": "ansiedade"
+    },
+    {
+     "id": "fiquei_animacao",
+     "palavra": "animado(a)",
+     "categoria": "animacao"
+    },
+    {
+     "id": "fiquei_saudade",
+     "palavra": "saudoso(a)",
+     "categoria": "saudade"
+    },
+    {
+     "id": "fiquei_coragem",
+     "palavra": "corajoso(a)",
+     "categoria": "coragem"
+    },
+    {
+     "id": "fiquei_abatimento",
+     "palavra": "abatido(a)",
+     "categoria": "abatimento"
+    }
+   ]
+  },
+  {
+   "id": "dia",
+   "texto": "Meu dia foi:",
+   "opcoes": [
+    {
+     "id": "dia_calma",
+     "palavra": "calmo",
+     "categoria": "calma"
+    },
+    {
+     "id": "dia_tristeza",
+     "palavra": "triste",
+     "categoria": "tristeza"
+    },
+    {
+     "id": "dia_alegria",
+     "palavra": "alegre",
+     "categoria": "alegria"
+    },
+    {
+     "id": "dia_cansaco",
+     "palavra": "cansativo",
+     "categoria": "cansaco"
+    },
+    {
+     "id": "dia_esperanca",
+     "palavra": "cheio de esperança",
+     "categoria": "esperanca"
+    },
+    {
+     "id": "dia_raiva",
+     "palavra": "irritante",
+     "categoria": "raiva"
+    },
+    {
+     "id": "dia_gratidao",
+     "palavra": "cheio de gratidão",
+     "categoria": "gratidao"
+    },
+    {
+     "id": "dia_ansiedade",
+     "palavra": "ansioso",
+     "categoria": "ansiedade"
+    },
+    {
+     "id": "dia_animacao",
+     "palavra": "animado",
+     "categoria": "animacao"
+    },
+    {
+     "id": "dia_saudade",
+     "palavra": "cheio de saudade",
+     "categoria": "saudade"
+    },
+    {
+     "id": "dia_coragem",
+     "palavra": "cheio de coragem",
+     "categoria": "coragem"
+    },
+    {
+     "id": "dia_abatimento",
+     "palavra": "pesado",
+     "categoria": "abatimento"
+    }
+   ]
+  },
+  {
+   "id": "coracao",
+   "texto": "Meu coração está:",
+   "opcoes": [
+    {
+     "id": "coracao_calma",
+     "palavra": "em paz",
+     "categoria": "calma"
+    },
+    {
+     "id": "coracao_tristeza",
+     "palavra": "apertado",
+     "categoria": "tristeza"
+    },
+    {
+     "id": "coracao_alegria",
+     "palavra": "radiante",
+     "categoria": "alegria"
+    },
+    {
+     "id": "coracao_cansaco",
+     "palavra": "cansado",
+     "categoria": "cansaco"
+    },
+    {
+     "id": "coracao_esperanca",
+     "palavra": "esperançoso",
+     "categoria": "esperanca"
+    },
+    {
+     "id": "coracao_raiva",
+     "palavra": "em chamas",
+     "categoria": "raiva"
+    },
+    {
+     "id": "coracao_gratidao",
+     "palavra": "grato",
+     "categoria": "gratidao"
+    },
+    {
+     "id": "coracao_ansiedade",
+     "palavra": "acelerado",
+     "categoria": "ansiedade"
+    },
+    {
+     "id": "coracao_animacao",
+     "palavra": "em festa",
+     "categoria": "animacao"
+    },
+    {
+     "id": "coracao_saudade",
+     "palavra": "saudoso",
+     "categoria": "saudade"
+    },
+    {
+     "id": "coracao_coragem",
+     "palavra": "forte",
+     "categoria": "coragem"
+    },
+    {
+     "id": "coracao_abatimento",
+     "palavra": "pesado",
+     "categoria": "abatimento"
+    }
+   ]
+  }
+ ]
+}
