@@ -1,0 +1,47 @@
+:root{
+  --bg:#120c08; --panel:#1b130d; --line:#3b2b1d; --ink:#f1e7d6; --gold:#d8b25a; --gold2:#ecc972;
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--serif);overflow:hidden}
+#app{height:100%;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+#view{flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+.screen{flex:1;min-height:0;display:flex;flex-direction:column}
+.erro,.soon p{margin:auto;padding:24px;text-align:center;opacity:.8;font-family:var(--sans);line-height:1.5}
+
+/* navegação inferior */
+#nav{display:flex;background:rgba(27,19,13,.97);border-top:1px solid var(--line);padding:4px 6px calc(6px + env(safe-area-inset-bottom,0px));font-family:var(--sans)}
+#nav a{flex:1;text-align:center;padding:11px 4px;border-radius:999px;color:var(--ink);opacity:.55;text-decoration:none;font-size:.84rem;font-weight:500}
+#nav a.on{opacity:1;color:var(--gold2);background:rgba(216,178,90,.14)}
+body[data-screen=hoje] #nav,body[data-screen=capa] #nav{display:none}
+
+/* telas simples */
+.soon{display:flex;flex-direction:column;flex:1;justify-content:center;text-align:center}
+.soon h1{margin:0 0 6px;font-weight:400;font-style:italic}
+
+/* tela Hoje */
+.top{display:flex;align-items:center;gap:12px;padding:12px 16px;font-family:var(--sans)}
+.top h1{margin:0;font-family:var(--serif);font-weight:400;font-size:1.25rem}
+.top small{display:block;opacity:.6}
+.top small::first-letter{text-transform:uppercase}
+.hbody{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px}
+.hfoot{padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--panel);font-family:var(--sans)}
+.q{margin:14px 0 12px;opacity:.75;font-family:var(--sans);font-size:.92rem}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;padding:16px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:inherit;font:italic 1.12rem var(--serif);cursor:pointer}
+.opt.on{border-color:var(--gold);background:rgba(216,178,90,.16);color:#f3d98f}
+.words{display:flex;flex-wrap:wrap;gap:10px}
+.word{padding:12px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:inherit;font:1rem var(--serif);cursor:pointer}
+.word.on{border-color:var(--gold);background:rgba(216,178,90,.2);color:#f3d98f}
+.link{background:none;border:0;color:var(--gold2);font:.85rem var(--sans);padding:6px 0;cursor:pointer;text-decoration:underline}
+.preview{min-height:1.7em;margin:0 0 10px;font:italic 1.2rem var(--serif)}
+.preview.dim{opacity:.45}
+.btn{display:block;width:100%;height:48px;border-radius:999px;border:0;background:var(--gold);color:#241a12;font:600 1rem var(--sans);cursor:pointer}
+.btn[disabled]{opacity:.35;cursor:default}
+.btn.ghost{background:rgba(255,255,255,.08);color:var(--ink);font-weight:500}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+.aviso{margin:0 0 10px;opacity:.75;font-size:.9rem;line-height:1.4}
+.msg{margin:0 0 10px;color:#ff9b8a;font-size:.9rem}
+.carimbo{margin:40px 8px 0;padding:28px 20px;border:2px solid var(--gold);border-radius:18px;text-align:center;font:italic 1.5rem/1.35 var(--serif);color:#f3d98f;transform:rotate(-2deg)}
+.carimbo small{display:block;margin-top:14px;font:600 .72rem var(--sans);letter-spacing:.18em;text-transform:uppercase;opacity:.7}
