@@ -115,5 +115,5 @@ $('wok').onclick=closeWheel; $('wh').onclick=e=>{if(e.target.id==='wh')closeWhee
   $('bk').onclick = () => { location.hash = '#/'; };
   $('sv').onclick = () => { flush(); $('sv').textContent = 'Salvo ✓'; setTimeout(() => { location.hash = '#/'; }, 700); };
   ui();
-  return () => { if (st) flush(); book.destroy(); };
+  return () => { if (st) flush(); try { api.saveCoverThumb(book.snapshot()); } catch (e) { console.error(e); } book.destroy(); };
 }
